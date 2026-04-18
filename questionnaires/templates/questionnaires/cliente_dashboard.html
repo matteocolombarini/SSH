@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Area Cliente{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">📊 Area Cliente / Category Manager</h1>
+
+    <h4 class="mt-5">Questionari Completati</h4>
+
+    {% if responses %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fornitore</th>
+                    <th>Questionario</th>
+                    <th>Data Compilazione</th>
+                    <th>Punteggio</th>
+                    <th>Azione</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for resp in responses %}
+                <tr>
+                    <td>{{ resp.supplier.company_name|default:resp.supplier.user.username }}</td>
+                    <td>{{ resp.questionnaire.name }}</td>
+                    <td>{{ resp.submitted_at|date:"d/m/Y H:i" }}</td>
+                    <td><span class="badge bg-success fs-6">{{ resp.total_score }} punti</span></td>
+                    <td><a href="#" class="btn btn-sm btn-info">Dettagli</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center py-4">
+        <h5>Nessun questionario è stato ancora compilato dai fornitori.</h5>
+    </div>
+    {% endif %}
+
+    <hr class="my-5">
+
+    <h4>I Miei Questionari</h4>
+    <div class="row">
+        {% for q in questionari %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>{{ q.name }}</h5>
+                    <a href="/admin/questionnaires/questionnaire/{{ q.id }}/change/"
+                       class="btn btn-primary btn-sm">Modifica Questionario</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
